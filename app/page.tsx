@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import { FolderIcon, LockClosedIcon } from "@heroicons/react/24/solid";
-import { GlobeAltIcon } from "@heroicons/react/24/solid";
 
 const Page = () => {
   const [url, setUrl] = useState(
