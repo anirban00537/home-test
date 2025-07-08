@@ -1,5 +1,5 @@
-import { folderStructure } from "../../../lib/folder-tree";
-import { successResponse, errorResponse } from "../../../lib/api-response";
+import { folderStructure } from "../../../lib/folderTree";
+import { successResponse, errorResponse } from "../../../lib/apiResponse";
 
 export async function GET() {
   try {
@@ -8,3 +8,4 @@ export async function GET() {
     return errorResponse("Failed to fetch folders", 500);
   }
 }
+ 
