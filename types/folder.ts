@@ -5,3 +5,9 @@ export interface FolderItem {
   children?: FolderItem[];
   path?: string;
 }
+
+export interface ApiResponse<T> {
+  success: boolean;
+  data: T | null;
+  message: string;
+}
