@@ -1,6 +1,7 @@
-import React, { useCallback } from "react";
-import { ChevronRight, FolderClosed, FolderOpen } from "lucide-react";
+import React, { useCallback, useState } from "react";
+import { ChevronRight, FolderClosed, FolderOpen, Loader2 } from "lucide-react";
 import { FolderItem } from "../types/folder";
+import { getFolderChildren } from "../service/folders";
 
 interface FolderTreeProps {
   folders: FolderItem[];
@@ -27,18 +28,53 @@ const FolderNode: React.FC<FolderNodeProps> = ({
   onFolderSelect,
   onExpandedChange,
 }) => {
+  const [children, setChildren] = useState<FolderItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [hasLoaded, setHasLoaded] = useState(false);
+
   const isExpanded = expandedIds.has(folder.id);
   const isSelected = folder.id === selectedFolderId;
-  const hasChildren = Boolean(folder.children?.length);
+  const hasChildren = folder.hasChildren || Boolean(folder.children?.length);
 
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
       if (e.button === 0 && hasChildren) {
+        // If expanding and we haven't loaded children yet
+        if (!isExpanded && !hasLoaded && !folder.children) {
+          setIsLoading(true);
+          setError(null);
+
+          getFolderChildren(folder.id)
+            .then((response) => {
+              if (response.success && response.data) {
+                setChildren(response.data);
+              } else {
+                setError(response.message || "Failed to load folder contents");
+              }
+              setHasLoaded(true);
+            })
+            .catch((err) => {
+              setError("Error loading folder contents");
+              console.error(err);
+            })
+            .finally(() => {
+              setIsLoading(false);
+            });
+        }
+
         onExpandedChange(folder.id, !isExpanded);
       }
       onFolderSelect?.(folder);
     },
-    [folder, hasChildren, isExpanded, onExpandedChange, onFolderSelect]
+    [
+      folder,
+      hasChildren,
+      isExpanded,
+      onExpandedChange,
+      onFolderSelect,
+      hasLoaded,
+    ]
   );
 
   const handleContextMenu = useCallback(
@@ -48,6 +84,15 @@ const FolderNode: React.FC<FolderNodeProps> = ({
     },
     [folder, onFolderSelect]
   );
+
+  // Use provided children or fetched children
+  const folderChildren = folder.children || (hasLoaded ? children : []);
+
+  // Use childrenCount from API or length of children array
+  const childCount =
+    folder.childrenCount !== undefined
+      ? folder.childrenCount
+      : folderChildren?.length || 0;
 
   return (
     <div>
@@ -63,9 +108,7 @@ const FolderNode: React.FC<FolderNodeProps> = ({
         role="button"
         aria-expanded={hasChildren ? isExpanded : undefined}
         aria-selected={isSelected}
-        aria-label={`${folder.name}${
-          hasChildren ? ", " + folder.children!.length + " items" : ""
-        }`}
+        aria-label={folder.name}
       >
         <div
           className={`
@@ -91,25 +134,50 @@ const FolderNode: React.FC<FolderNodeProps> = ({
 
           {hasChildren && (
             <span className="ml-auto text-xs text-slate-400">
-              {folder.children?.length}
+              {isLoading ? (
+                <Loader2 className="w-3 h-3 animate-spin" />
+              ) : (
+                childCount || ""
+              )}
             </span>
           )}
         </div>
       </div>
 
-      {isExpanded && hasChildren && folder.children && (
+      {isExpanded && (
         <div className="border-l border-slate-200 ml-2">
-          {folder.children.map((child) => (
-            <FolderNode
-              key={child.id}
-              folder={child}
-              level={level + 1}
-              selectedFolderId={selectedFolderId}
-              expandedIds={expandedIds}
-              onFolderSelect={onFolderSelect}
-              onExpandedChange={onExpandedChange}
-            />
-          ))}
+          {isLoading && (
+            <div
+              className="flex items-center py-1 px-2"
+              style={{ paddingLeft: `${level * 12 + 20}px` }}
+            >
+              <Loader2 className="w-3 h-3 text-slate-400 animate-spin mr-2" />
+              <span className="text-xs text-slate-500">Loading...</span>
+            </div>
+          )}
+
+          {error && (
+            <div
+              className="flex items-center py-1 px-2"
+              style={{ paddingLeft: `${level * 12 + 20}px` }}
+            >
+              <span className="text-xs text-red-500">{error}</span>
+            </div>
+          )}
+
+          {!isLoading &&
+            !error &&
+            folderChildren?.map((child) => (
+              <FolderNode
+                key={child.id}
+                folder={child}
+                level={level + 1}
+                selectedFolderId={selectedFolderId}
+                expandedIds={expandedIds}
+                onFolderSelect={onFolderSelect}
+                onExpandedChange={onExpandedChange}
+              />
+            ))}
         </div>
       )}
     </div>

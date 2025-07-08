@@ -1,13 +1,15 @@
 export interface FolderItem {
   id: string;
   name: string;
-  type: "folder" | "file";
+  type: string;
+  path: string;
   children?: FolderItem[];
-  path?: string;
+  hasChildren?: boolean;
+  childrenCount?: number;
 }
 
 export interface ApiResponse<T> {
   success: boolean;
-  data: T | null;
   message: string;
+  data: T;
 }

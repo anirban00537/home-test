@@ -35,3 +35,4 @@ export const FolderDetails: React.FC<FolderDetailsProps> = ({ folder }) => (
     </div>
   </div>
 );
+ 
