@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { ChevronRightIcon } from "@heroicons/react/24/solid";
-import { FolderIcon, LockClosedIcon } from "@heroicons/react/24/solid";
+import { ChevronRight, FolderClosed, Lock } from "lucide-react";
 
 const Page = () => {
   const [url, setUrl] = useState(
@@ -14,7 +13,7 @@ const Page = () => {
         <div className="max-w-full mx-auto p-3 border-b border-slate-200/80">
           <div className="flex items-center gap-3">
             <h2 className="text-xs font-medium text-slate-500 flex items-center gap-1.5 whitespace-nowrap">
-              <LockClosedIcon className="w-3.5 h-3.5" />
+              <Lock className="w-3 h-3" />
               <span>Address</span>
             </h2>
             <div className="group relative flex-1">
@@ -53,8 +52,8 @@ const Page = () => {
             <div className="space-y-0.5">
               <div className="folder-item group">
                 <div className="flex items-center py-1 px-2 hover:bg-slate-200/60 rounded cursor-pointer transition-all duration-200 group text-slate-600">
-                  <ChevronRightIcon className="w-4 h-4 text-slate-400 transform transition-transform duration-200 group-hover:text-slate-600" />
-                  <FolderIcon className="w-5 h-5 text-blue-400 mx-2 group-hover:text-blue-600" />
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-900 font-bold  transform transition-transform duration-200 group-hover:text-slate-600" />
+                  <FolderClosed className="w-4 h-4 text-blue-400 mx-2 group-hover:text-blue-600 fill-current" />
                   <span className="text-sm font-medium group-hover:text-slate-900">
                     Dir 1
                   </span>
@@ -63,8 +62,8 @@ const Page = () => {
 
               <div className="folder-item group">
                 <div className="flex items-center py-1 px-2 hover:bg-slate-200/60 rounded cursor-pointer transition-all duration-200 group text-slate-600">
-                  <ChevronRightIcon className="w-4 h-4 text-slate-400 transform transition-transform duration-200 group-hover:text-slate-600" />
-                  <FolderIcon className="w-5 h-5 text-blue-400 mx-2 group-hover:text-blue-600" />
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-900 transform transition-transform duration-200 group-hover:text-slate-600" />
+                  <FolderClosed className="w-4 h-4 text-blue-400 mx-2 group-hover:text-blue-600 fill-current" />
                   <span className="text-sm font-medium group-hover:text-slate-900">
                     Dir 2
                   </span>
@@ -73,8 +72,8 @@ const Page = () => {
                 <div className="ml-4">
                   <div className="folder-item group">
                     <div className="flex items-center py-1 px-2 hover:bg-slate-200/60 rounded cursor-pointer transition-all duration-200 group text-slate-600">
-                      <ChevronRightIcon className="w-4 h-4 text-slate-400 transform transition-transform duration-200 group-hover:text-slate-600" />
-                      <FolderIcon className="w-5 h-5 text-blue-400 mx-2 group-hover:text-blue-600" />
+                      <ChevronRight className="w-3.5 h-3.5 text-slate-900 transform transition-transform duration-200 group-hover:text-slate-600" />
+                      <FolderClosed className="w-4 h-4 text-blue-400 mx-2 group-hover:text-blue-600 fill-current" />
                       <span className="text-sm font-medium group-hover:text-slate-900">
                         Sub Dir 1.1
                       </span>
@@ -83,8 +82,8 @@ const Page = () => {
 
                   <div className="folder-item group">
                     <div className="flex items-center py-1 px-2 hover:bg-slate-200/60 rounded cursor-pointer transition-all duration-200 group text-slate-600">
-                      <ChevronRightIcon className="w-4 h-4 text-slate-400 transform transition-transform duration-200 group-hover:text-slate-600" />
-                      <FolderIcon className="w-5 h-5 text-blue-400 mx-2 group-hover:text-blue-600" />
+                      <ChevronRight className="w-3.5 h-3.5 text-slate-900 transform transition-transform duration-200 group-hover:text-slate-600" />
+                      <FolderClosed className="w-4 h-4 text-blue-400 mx-2 group-hover:text-blue-600 fill-current" />
                       <span className="text-sm font-medium group-hover:text-slate-900">
                         Sub Dir 1.2
                       </span>
@@ -93,8 +92,8 @@ const Page = () => {
                     <div className="ml-4">
                       <div className="folder-item group">
                         <div className="flex items-center py-1 px-2 hover:bg-slate-200/60 rounded cursor-pointer transition-all duration-200 group text-slate-600">
-                          <ChevronRightIcon className="w-4 h-4 text-slate-400 transform transition-transform duration-200 group-hover:text-slate-600" />
-                          <FolderIcon className="w-5 h-5 text-blue-400 mx-2 group-hover:text-blue-600" />
+                          <ChevronRight className="w-3.5 h-3.5 text-slate-900 transform transition-transform duration-200 group-hover:text-slate-600" />
+                          <FolderClosed className="w-4 h-4 text-blue-400 mx-2 group-hover:text-blue-600 fill-current" />
                           <span className="text-sm font-medium group-hover:text-slate-900">
                             Sub Dir 1.2.1
                           </span>
@@ -107,8 +106,8 @@ const Page = () => {
 
               <div className="folder-item group">
                 <div className="flex items-center py-1 px-2 hover:bg-slate-200/60 rounded cursor-pointer transition-all duration-200 group text-slate-600">
-                  <ChevronRightIcon className="w-4 h-4 text-slate-400 transform transition-transform duration-200 group-hover:text-slate-600" />
-                  <FolderIcon className="w-5 h-5 text-blue-400 mx-2 group-hover:text-blue-600" />
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-900 transform transition-transform duration-200 group-hover:text-slate-600" />
+                  <FolderClosed className="w-4 h-4 text-blue-400 mx-2 group-hover:text-blue-600 fill-current" />
                   <span className="text-sm font-medium group-hover:text-slate-900">
                     Sub Dir 3
                   </span>
@@ -117,8 +116,8 @@ const Page = () => {
 
               <div className="folder-item group">
                 <div className="flex items-center py-1 px-2 hover:bg-slate-200/60 rounded cursor-pointer transition-all duration-200 group text-slate-600">
-                  <ChevronRightIcon className="w-4 h-4 text-slate-400 transform transition-transform duration-200 group-hover:text-slate-600" />
-                  <FolderIcon className="w-5 h-5 text-blue-400 mx-2 group-hover:text-blue-600" />
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-900 transform transition-transform duration-200 group-hover:text-slate-600" />
+                  <FolderClosed className="w-4 h-4 text-blue-400 mx-2 group-hover:text-blue-600 fill-current" />
                   <span className="text-sm font-medium group-hover:text-slate-900">
                     Dir 4
                   </span>
@@ -127,8 +126,8 @@ const Page = () => {
                 <div className="ml-4">
                   <div className="folder-item group">
                     <div className="flex items-center py-1 px-2 hover:bg-slate-200/60 rounded cursor-pointer transition-all duration-200 group text-slate-600">
-                      <ChevronRightIcon className="w-4 h-4 text-slate-400 transform transition-transform duration-200 group-hover:text-slate-600" />
-                      <FolderIcon className="w-5 h-5 text-blue-400 mx-2 group-hover:text-blue-600" />
+                      <ChevronRight className="w-3.5 h-3.5 text-slate-900 transform transition-transform duration-200 group-hover:text-slate-600" />
+                      <FolderClosed className="w-4 h-4 text-blue-400 mx-2 group-hover:text-blue-600 fill-current" />
                       <span className="text-sm font-medium group-hover:text-slate-900">
                         Sub Dir 4.1
                       </span>
@@ -137,8 +136,8 @@ const Page = () => {
                     <div className="ml-4">
                       <div className="folder-item group">
                         <div className="flex items-center py-1 px-2 hover:bg-slate-200/60 rounded cursor-pointer transition-all duration-200 group text-slate-600">
-                          <ChevronRightIcon className="w-4 h-4 text-slate-400 transform transition-transform duration-200 group-hover:text-slate-600" />
-                          <FolderIcon className="w-5 h-5 text-blue-400 mx-2 group-hover:text-blue-600" />
+                          <ChevronRight className="w-3.5 h-3.5 text-slate-900 transform transition-transform duration-200 group-hover:text-slate-600" />
+                          <FolderClosed className="w-4 h-4 text-blue-400 mx-2 group-hover:text-blue-600 fill-current" />
                           <span className="text-sm font-medium group-hover:text-slate-900">
                             Sub Dir 4.1.1
                           </span>
@@ -146,8 +145,8 @@ const Page = () => {
                       </div>
                       <div className="folder-item group">
                         <div className="flex items-center py-1 px-2 hover:bg-slate-200/60 rounded cursor-pointer transition-all duration-200 group text-slate-600">
-                          <ChevronRightIcon className="w-4 h-4 text-slate-400 transform transition-transform duration-200 group-hover:text-slate-600" />
-                          <FolderIcon className="w-5 h-5 text-blue-400 mx-2 group-hover:text-blue-600" />
+                          <ChevronRight className="w-3.5 h-3.5 text-slate-900 transform transition-transform duration-200 group-hover:text-slate-600" />
+                          <FolderClosed className="w-4 h-4 text-blue-400 mx-2 group-hover:text-blue-600 fill-current" />
                           <span className="text-sm font-medium group-hover:text-slate-900">
                             Sub Dir 4.1.2
                           </span>
@@ -160,8 +159,8 @@ const Page = () => {
 
               <div className="folder-item group">
                 <div className="flex items-center py-1 px-2 hover:bg-slate-200/60 rounded cursor-pointer transition-all duration-200 group text-slate-600">
-                  <ChevronRightIcon className="w-4 h-4 text-slate-400 transform transition-transform duration-200 group-hover:text-slate-600" />
-                  <FolderIcon className="w-5 h-5 text-blue-400 mx-2 group-hover:text-blue-600" />
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-900 transform transition-transform duration-200 group-hover:text-slate-600" />
+                  <FolderClosed className="w-4 h-4 text-blue-400 mx-2 group-hover:text-blue-600 fill-current" />
                   <span className="text-sm font-medium group-hover:text-slate-900">
                     Dir 5
                   </span>
@@ -170,8 +169,8 @@ const Page = () => {
                 <div className="ml-4">
                   <div className="folder-item group">
                     <div className="flex items-center py-1 px-2 hover:bg-slate-200/60 rounded cursor-pointer transition-all duration-200 group text-slate-600">
-                      <ChevronRightIcon className="w-4 h-4 text-slate-400 transform transition-transform duration-200 group-hover:text-slate-600" />
-                      <FolderIcon className="w-5 h-5 text-blue-400 mx-2 group-hover:text-blue-600" />
+                      <ChevronRight className="w-3.5 h-3.5 text-slate-900 transform transition-transform duration-200 group-hover:text-slate-600" />
+                      <FolderClosed className="w-4 h-4 text-blue-400 mx-2 group-hover:text-blue-600 fill-current" />
                       <span className="text-sm font-medium group-hover:text-slate-900">
                         Sub Dir 5.1
                       </span>
@@ -179,8 +178,8 @@ const Page = () => {
                   </div>
                   <div className="folder-item group">
                     <div className="flex items-center py-1 px-2 hover:bg-slate-200/60 rounded cursor-pointer transition-all duration-200 group text-slate-600">
-                      <ChevronRightIcon className="w-4 h-4 text-slate-400 transform transition-transform duration-200 group-hover:text-slate-600" />
-                      <FolderIcon className="w-5 h-5 text-blue-400 mx-2 group-hover:text-blue-600" />
+                      <ChevronRight className="w-3.5 h-3.5 text-slate-900 transform transition-transform duration-200 group-hover:text-slate-600" />
+                      <FolderClosed className="w-4 h-4 text-blue-400 mx-2 group-hover:text-blue-600 fill-current" />
                       <span className="text-sm font-medium group-hover:text-slate-900">
                         Sub Dir 5.2
                       </span>
