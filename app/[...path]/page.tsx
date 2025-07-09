@@ -12,7 +12,6 @@ import { AddressBar } from "../../components/AddressBar";
 import {
   pathToFolderState,
   findFolderByPath,
-  findParentFolder,
 } from "../../service/folderNavigation";
 
 const DynamicFolderPage: React.FC = () => {
@@ -22,20 +21,21 @@ const DynamicFolderPage: React.FC = () => {
   const currentPath = `/${pathSegments.join("/")}`;
 
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
-  const [rootFolder, setRootFolder] = useState<FolderItem | null>(null);
+
+  const rootFolder = useMemo(() => {
+    return findFolderByPath(currentPath);
+  }, [currentPath]);
 
   useEffect(() => {
-    const { selectedFolder, rootFolder, expandedIds } =
-      pathToFolderState(currentPath);
+    const { expandedIds: newExpandedIds } = pathToFolderState(currentPath);
 
-    if (!selectedFolder && currentPath !== "/") {
+    if (!rootFolder && currentPath !== "/") {
       router.replace("/");
       return;
     }
 
-    setRootFolder(rootFolder);
-    setExpandedIds(expandedIds);
-  }, [currentPath, router]);
+    setExpandedIds(newExpandedIds);
+  }, [currentPath, router, rootFolder]);
 
   const queryKey = rootFolder ? ["folders", rootFolder.id] : ["folders"];
 
@@ -64,8 +64,6 @@ const DynamicFolderPage: React.FC = () => {
 
   const handleSetNewRoot = useCallback(
     (folder: FolderItem) => {
-      setRootFolder(folder);
-      setExpandedIds(new Set());
       router.push(folder.path);
     },
     [router]
