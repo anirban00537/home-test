@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { FolderItem } from "../types/folder";
 import { FolderTree } from "../components/FolderTree";
 import { AddressBar } from "../components/AddressBar";
@@ -18,9 +18,10 @@ const DefaultPage: React.FC<DefaultPageProps> = ({
   onExpandedChange,
   onSetNewRoot,
 }) => {
+  const pathname = usePathname();
   const currentUrl =
     typeof window !== "undefined"
-      ? window.location.href
+      ? `${window.location.protocol}//${window.location.host}${pathname}`
       : "http://localhost:3000/";
 
   return (
