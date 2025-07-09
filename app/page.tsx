@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getFolders } from "../service/folders";
@@ -20,16 +20,12 @@ const Page: React.FC = () => {
     gcTime: 10 * 60 * 1000,
   });
 
-
   const handleExpandedChange = useCallback((id: string, expanded: boolean) => {
     setExpandedIds((prev) => {
-      const newSet = new Set(prev);
-      if (expanded) {
-        newSet.add(id);
-      } else {
-        newSet.delete(id);
-      }
-      return newSet;
+      const next = new Set(prev);
+      if (expanded) next.add(id);
+      else next.delete(id);
+      return next;
     });
   }, []);
 
@@ -40,13 +36,11 @@ const Page: React.FC = () => {
     [router]
   );
 
-  const folders = useMemo(() => {
-    return data?.success && data.data ? data.data : [];
-  }, [data?.success, data?.data]);
-
   if (isLoading) return <LoadingState />;
   if (error) return <ErrorState />;
-  if (!folders.length) return <EmptyState />;
+
+  const folders = data?.success ? data.data : [];
+  if (!folders?.length) return <EmptyState />;
 
   return (
     <DefaultPage

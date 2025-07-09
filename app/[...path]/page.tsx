@@ -1,9 +1,9 @@
 "use client";
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getFolders, getFolderChildren } from "../../service/folders";
-import { FolderItem, ApiResponse } from "../../types/folder";
+import { FolderItem } from "../../types/folder";
 import { FolderTree } from "../../components/FolderTree";
 import { EmptyState } from "../../components/EmptyState";
 import { LoadingState } from "../../components/LoadingState";
@@ -20,45 +20,36 @@ const DynamicFolderPage: React.FC = () => {
   const pathSegments = (params.path as string[]) || [];
   const currentPath = `/${pathSegments.join("/")}`;
 
-  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(() => {
+    const { expandedIds: initialIds } = pathToFolderState(currentPath);
+    return initialIds;
+  });
 
-  const rootFolder = useMemo(() => {
-    return findFolderByPath(currentPath);
-  }, [currentPath]);
+  const rootFolder = useMemo(
+    () => findFolderByPath(currentPath),
+    [currentPath]
+  );
 
-  useEffect(() => {
-    const { expandedIds: newExpandedIds } = pathToFolderState(currentPath);
+  // Redirect to home if invalid path
+  if (!rootFolder && currentPath !== "/") {
+    router.replace("/");
+    return null;
+  }
 
-    if (!rootFolder && currentPath !== "/") {
-      router.replace("/");
-      return;
-    }
-
-    setExpandedIds(newExpandedIds);
-  }, [currentPath, router, rootFolder]);
-
-  const queryKey = rootFolder ? ["folders", rootFolder.id] : ["folders"];
-
-  const queryFn = useCallback(() => {
-    return rootFolder ? getFolderChildren(rootFolder.id) : getFolders();
-  }, [rootFolder]);
-
-  const { data, isLoading, error } = useQuery<ApiResponse<FolderItem[]>>({
-    queryKey,
-    queryFn,
+  const { data, isLoading, error } = useQuery({
+    queryKey: rootFolder ? ["folders", rootFolder.id] : ["folders"],
+    queryFn: () =>
+      rootFolder ? getFolderChildren(rootFolder.id) : getFolders(),
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
 
   const handleExpandedChange = useCallback((id: string, expanded: boolean) => {
     setExpandedIds((prev) => {
-      const newSet = new Set(prev);
-      if (expanded) {
-        newSet.add(id);
-      } else {
-        newSet.delete(id);
-      }
-      return newSet;
+      const next = new Set(prev);
+      if (expanded) next.add(id);
+      else next.delete(id);
+      return next;
     });
   }, []);
 
@@ -71,30 +62,22 @@ const DynamicFolderPage: React.FC = () => {
 
   const handleNavigateToParent = useCallback(() => {
     const pathParts = currentPath.split("/").filter(Boolean);
-    if (pathParts.length > 1) {
-      pathParts.pop();
-      router.push(`/${pathParts.join("/")}`);
-    } else {
-      router.push("/");
-    }
+    const parentPath =
+      pathParts.length > 1 ? `/${pathParts.slice(0, -1).join("/")}` : "/";
+    router.push(parentPath);
   }, [currentPath, router]);
 
   const currentUrl = useMemo(() => {
-    const baseUrl =
-      typeof window !== "undefined"
-        ? `${window.location.protocol}//${window.location.host}`
-        : "http://localhost:3000";
-
-    return `${baseUrl}${currentPath}`;
+    if (typeof window === "undefined")
+      return `http://localhost:3000${currentPath}`;
+    return `${window.location.origin}${currentPath}`;
   }, [currentPath]);
 
-  const folders = useMemo(() => {
-    return data?.success && data.data ? data.data : [];
-  }, [data?.success, data?.data]);
+  const folders = data?.success ? data.data : [];
 
   if (isLoading) return <LoadingState />;
   if (error) return <ErrorState />;
-  if (!folders.length) return <EmptyState />;
+  if (!folders?.length) return <EmptyState />;
 
   return (
     <div className="min-h-screen flex flex-col">
