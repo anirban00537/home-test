@@ -60,6 +60,7 @@ export const FolderNode: React.FC<FolderNodeProps> = React.memo(
       (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
+
         if (hasChildren && onSetNewRoot) {
           onSetNewRoot(folder);
         }
@@ -73,7 +74,7 @@ export const FolderNode: React.FC<FolderNodeProps> = React.memo(
     return (
       <div className="transition-all duration-200 ease-out">
         <div
-          className="group flex items-center py-2 px-3 rounded-lg cursor-pointer transition-all duration-200 ease-out hover:bg-slate-50 active:bg-slate-100 text-slate-700 hover:text-slate-900"
+          className="group flex items-center py-2 px-3 rounded-lg cursor-pointer transition-all duration-200 ease-out hover:bg-slate-50 active:bg-slate-100 text-slate-700 hover:text-slate-900 select-none"
           style={{ paddingLeft: `${level * 16 + 12}px` }}
           onDoubleClick={handleDoubleClick}
           role="button"
@@ -83,7 +84,7 @@ export const FolderNode: React.FC<FolderNodeProps> = React.memo(
           <button
             onClick={handleToggleExpand}
             className={`
-            w-5 h-5 flex items-center justify-center rounded-md transition-all duration-200 ease-out
+            w-5 h-5 flex items-center justify-center rounded-md transition-all duration-200 ease-out select-none
             ${
               hasChildren
                 ? "hover:bg-slate-200 active:bg-slate-300"
@@ -97,7 +98,7 @@ export const FolderNode: React.FC<FolderNodeProps> = React.memo(
           </button>
 
           <div className="flex items-center ml-2 min-w-0 flex-1">
-            <div className="transition-all duration-200 ease-out mr-3 flex-shrink-0">
+            <div className="transition-all duration-200 ease-out mr-3 flex-shrink-0 select-none">
               <FolderIcon
                 isExpanded={isExpanded}
                 className={`w-5 h-5 transition-all duration-200 ${
@@ -109,14 +110,14 @@ export const FolderNode: React.FC<FolderNodeProps> = React.memo(
             </div>
 
             <span
-              className="text-sm font-medium truncate transition-all duration-200"
+              className="text-sm font-medium truncate transition-all duration-200 select-none"
               title={folder.name}
             >
               {folder.name}
             </span>
 
             {hasChildren && (
-              <div className="ml-auto flex items-center">
+              <div className="ml-auto flex items-center select-none">
                 {isLoading ? (
                   <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-500" />
                 ) : (
@@ -134,7 +135,7 @@ export const FolderNode: React.FC<FolderNodeProps> = React.memo(
             <div className="border-l-2 border-slate-100 ml-4 transition-all duration-300 ease-out">
               {isLoading && (
                 <div
-                  className="flex items-center py-2 px-3 ml-4"
+                  className="flex items-center py-2 px-3 ml-4 select-none"
                   style={{ paddingLeft: `${level * 16 + 20}px` }}
                 >
                   <Loader2 className="w-3.5 h-3.5 text-slate-400 animate-spin mr-2" />
@@ -144,7 +145,7 @@ export const FolderNode: React.FC<FolderNodeProps> = React.memo(
 
               {error && (
                 <div
-                  className="flex items-center py-2 px-3 ml-4"
+                  className="flex items-center py-2 px-3 ml-4 select-none"
                   style={{ paddingLeft: `${level * 16 + 20}px` }}
                 >
                   <span className="text-xs text-red-500 bg-red-50 px-2 py-1 rounded-md">
