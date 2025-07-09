@@ -7,8 +7,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = params;
-    console.log(id, "idididid");
+    const id = params.id;
 
     const parentFolder = findFolderById(folderStructure, id);
 

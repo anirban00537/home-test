@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { ChevronRight, FolderClosed, FolderOpen, Loader2 } from "lucide-react";
 import { FolderItem } from "../types/folder";
 import { getFolderChildren } from "../service/folders";
@@ -40,43 +40,43 @@ const FolderNode: React.FC<FolderNodeProps> = ({
   const isSelected = folder.id === selectedFolderId;
   const hasChildren = folder.hasChildren || Boolean(folder.children?.length);
 
+  useEffect(() => {
+    if (isExpanded && hasChildren && !hasLoaded && !folder.children) {
+      setIsLoading(true);
+      setError(null);
+
+      getFolderChildren(folder.id)
+        .then((response) => {
+          if (response.success && response.data) {
+            setChildren(response.data);
+          } else {
+            setError(response.message || "Failed to load folder contents");
+          }
+          setHasLoaded(true);
+        })
+        .catch((err) => {
+          setError("Error loading folder contents");
+          console.error(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [isExpanded, hasChildren, hasLoaded, folder.children, folder.id]);
+
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
-      if (e.button === 0 && hasChildren) {
-        if (!isExpanded && !hasLoaded && !folder.children) {
-          setIsLoading(true);
-          setError(null);
+      e.stopPropagation();
 
-          getFolderChildren(folder.id)
-            .then((response) => {
-              if (response.success && response.data) {
-                setChildren(response.data);
-              } else {
-                setError(response.message || "Failed to load folder contents");
-              }
-              setHasLoaded(true);
-            })
-            .catch((err) => {
-              setError("Error loading folder contents");
-              console.error(err);
-            })
-            .finally(() => {
-              setIsLoading(false);
-            });
+      if (e.button === 0) {
+        onFolderSelect?.(folder);
+
+        if (hasChildren) {
+          onExpandedChange(folder.id, !isExpanded);
         }
-
-        onExpandedChange(folder.id, !isExpanded);
       }
-      onFolderSelect?.(folder);
     },
-    [
-      folder,
-      hasChildren,
-      isExpanded,
-      onExpandedChange,
-      onFolderSelect,
-      hasLoaded,
-    ]
+    [folder, hasChildren, isExpanded, onExpandedChange, onFolderSelect]
   );
 
   const handleDoubleClick = useCallback(
