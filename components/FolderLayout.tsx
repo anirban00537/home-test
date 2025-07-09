@@ -22,23 +22,43 @@ export const FolderLayout = React.memo<FolderLayoutProps>(
     onNavigateToParent,
   }) => {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
         <AddressBar
           currentUrl={currentUrl}
           onNavigateToParent={onNavigateToParent}
         />
 
-        <main className="flex flex-1">
-          <aside className="w-64 border-r border-slate-200 bg-slate-50">
-            <nav className="p-2" aria-label="Folder navigation">
-              <FolderTree
-                folders={folders}
-                expandedIds={expandedIds}
-                onExpandedChange={onExpandedChange}
-                onSetNewRoot={onSetNewRoot}
-              />
-            </nav>
+        <main className="flex flex-1 relative">
+          <aside className="w-80 bg-white border-r border-slate-200/60 transition-all duration-300 ease-out">
+            <div className="h-full overflow-hidden">
+              <nav
+                className="p-4 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent"
+                aria-label="Folder navigation"
+              >
+                <FolderTree
+                  folders={folders}
+                  expandedIds={expandedIds}
+                  onExpandedChange={onExpandedChange}
+                  onSetNewRoot={onSetNewRoot}
+                />
+              </nav>
+            </div>
           </aside>
+
+          <div className="flex-1 bg-white/40 backdrop-blur-sm transition-all duration-300">
+            <div className="p-8 h-full flex items-center justify-center">
+              <div className="text-slate-400 text-center">
+                <div className="w-16 h-16 mx-auto mb-4 opacity-40">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M10 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2h-8l-2-2z" />
+                  </svg>
+                </div>
+                <p className="text-sm font-medium">
+                  Browse folders using the sidebar
+                </p>
+              </div>
+            </div>
+          </div>
         </main>
       </div>
     );
