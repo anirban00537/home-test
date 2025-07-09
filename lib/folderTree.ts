@@ -15,23 +15,23 @@ export const folderStructure: FolderItem[] = [
     path: "/dir-2",
     children: [
       {
-        id: "subdir1.1",
-        name: "Sub Dir 1.1",
+        id: "subdir2.1",
+        name: "Sub Dir 2.1",
         type: "folder",
-        path: "/dir-2/sub-dir-1-1",
+        path: "/dir-2/sub-dir-2-1",
         children: [],
       },
       {
-        id: "subdir1.2",
-        name: "Sub Dir 1.2",
+        id: "subdir2.2",
+        name: "Sub Dir 2.2",
         type: "folder",
-        path: "/dir-2/sub-dir-1-2",
+        path: "/dir-2/sub-dir-2-2",
         children: [
           {
-            id: "subdir1.2.1",
-            name: "Sub Dir 1.2.1",
+            id: "subdir2.2.1",
+            name: "Sub Dir 2.2.1",
             type: "folder",
-            path: "/dir-2/sub-dir-1-2/sub-dir-1-2-1",
+            path: "/dir-2/sub-dir-2-2/sub-dir-2-2-1",
             children: [],
           },
         ],

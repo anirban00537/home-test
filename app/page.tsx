@@ -11,7 +11,6 @@ import DefaultPage from "./default";
 
 const Page: React.FC = () => {
   const router = useRouter();
-  const [selectedFolder, setSelectedFolder] = useState<FolderItem | null>(null);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 
   const { data, isLoading, error } = useQuery<ApiResponse<FolderItem[]>>({
@@ -21,9 +20,6 @@ const Page: React.FC = () => {
     gcTime: 10 * 60 * 1000,
   });
 
-  const handleFolderSelect = useCallback((folder: FolderItem) => {
-    setSelectedFolder(folder);
-  }, []);
 
   const handleExpandedChange = useCallback((id: string, expanded: boolean) => {
     setExpandedIds((prev) => {
@@ -55,9 +51,7 @@ const Page: React.FC = () => {
   return (
     <DefaultPage
       folders={folders}
-      selectedFolder={selectedFolder}
       expandedIds={expandedIds}
-      onFolderSelect={handleFolderSelect}
       onExpandedChange={handleExpandedChange}
       onSetNewRoot={handleSetNewRoot}
     />

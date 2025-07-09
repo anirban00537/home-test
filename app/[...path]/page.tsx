@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getFolders, getFolderChildren } from "../../service/folders";
 import { FolderItem, ApiResponse } from "../../types/folder";
 import { FolderTree } from "../../components/FolderTree";
-import { FolderDetails } from "../../components/FolderDetails";
 import { EmptyState } from "../../components/EmptyState";
 import { LoadingState } from "../../components/LoadingState";
 import { ErrorState } from "../../components/ErrorState";
@@ -22,7 +21,6 @@ const DynamicFolderPage: React.FC = () => {
   const pathSegments = (params.path as string[]) || [];
   const currentPath = `/${pathSegments.join("/")}`;
 
-  const [selectedFolder, setSelectedFolder] = useState<FolderItem | null>(null);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [rootFolder, setRootFolder] = useState<FolderItem | null>(null);
 
@@ -35,7 +33,6 @@ const DynamicFolderPage: React.FC = () => {
       return;
     }
 
-    setSelectedFolder(selectedFolder);
     setRootFolder(rootFolder);
     setExpandedIds(expandedIds);
   }, [currentPath, router]);
@@ -53,10 +50,6 @@ const DynamicFolderPage: React.FC = () => {
     gcTime: 10 * 60 * 1000,
   });
 
-  const handleFolderSelect = useCallback((folder: FolderItem) => {
-    setSelectedFolder(folder);
-  }, []);
-
   const handleExpandedChange = useCallback((id: string, expanded: boolean) => {
     setExpandedIds((prev) => {
       const newSet = new Set(prev);
@@ -72,7 +65,6 @@ const DynamicFolderPage: React.FC = () => {
   const handleSetNewRoot = useCallback(
     (folder: FolderItem) => {
       setRootFolder(folder);
-      setSelectedFolder(null);
       setExpandedIds(new Set());
       router.push(folder.path);
     },
@@ -93,15 +85,10 @@ const DynamicFolderPage: React.FC = () => {
     const baseUrl =
       typeof window !== "undefined"
         ? `${window.location.protocol}//${window.location.host}`
-        : "localhost:3000";
+        : "http://localhost:3000";
 
-    if (rootFolder) {
-      return selectedFolder
-        ? `${baseUrl}${rootFolder.path}/${selectedFolder.name}`
-        : `${baseUrl}${rootFolder.path}`;
-    }
-    return selectedFolder ? `${baseUrl}${selectedFolder.path}` : `${baseUrl}/`;
-  }, [selectedFolder, rootFolder]);
+    return `${baseUrl}${currentPath}`;
+  }, [currentPath]);
 
   const folders = useMemo(() => {
     return data?.success && data.data ? data.data : [];
@@ -125,22 +112,12 @@ const DynamicFolderPage: React.FC = () => {
           <nav className="p-2" aria-label="Folder navigation">
             <FolderTree
               folders={folders}
-              onFolderSelect={handleFolderSelect}
-              selectedFolderId={selectedFolder?.id}
               expandedIds={expandedIds}
               onExpandedChange={handleExpandedChange}
               onSetNewRoot={handleSetNewRoot}
             />
           </nav>
         </aside>
-
-        <section className="flex-1 bg-white p-6">
-          {selectedFolder ? (
-            <FolderDetails folder={selectedFolder} />
-          ) : (
-            <EmptyState />
-          )}
-        </section>
       </main>
     </div>
   );
