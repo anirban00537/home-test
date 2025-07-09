@@ -9,6 +9,7 @@ interface FolderTreeProps {
   selectedFolderId?: string;
   expandedIds: Set<string>;
   onExpandedChange: (id: string, expanded: boolean) => void;
+  onSetNewRoot?: (folder: FolderItem) => void;
 }
 
 interface FolderNodeProps {
@@ -18,6 +19,7 @@ interface FolderNodeProps {
   expandedIds: Set<string>;
   onFolderSelect?: (folder: FolderItem) => void;
   onExpandedChange: (id: string, expanded: boolean) => void;
+  onSetNewRoot?: (folder: FolderItem) => void;
 }
 
 const FolderNode: React.FC<FolderNodeProps> = ({
@@ -27,6 +29,7 @@ const FolderNode: React.FC<FolderNodeProps> = ({
   expandedIds,
   onFolderSelect,
   onExpandedChange,
+  onSetNewRoot,
 }) => {
   const [children, setChildren] = useState<FolderItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +43,6 @@ const FolderNode: React.FC<FolderNodeProps> = ({
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
       if (e.button === 0 && hasChildren) {
-        // If expanding and we haven't loaded children yet
         if (!isExpanded && !hasLoaded && !folder.children) {
           setIsLoading(true);
           setError(null);
@@ -77,6 +79,18 @@ const FolderNode: React.FC<FolderNodeProps> = ({
     ]
   );
 
+  const handleDoubleClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (hasChildren && onSetNewRoot) {
+        onSetNewRoot(folder);
+      }
+    },
+    [folder, hasChildren, onSetNewRoot]
+  );
+
   const handleContextMenu = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
@@ -85,10 +99,8 @@ const FolderNode: React.FC<FolderNodeProps> = ({
     [folder, onFolderSelect]
   );
 
-  // Use provided children or fetched children
   const folderChildren = folder.children || (hasLoaded ? children : []);
 
-  // Use childrenCount from API or length of children array
   const childCount =
     folder.childrenCount !== undefined
       ? folder.childrenCount
@@ -104,6 +116,7 @@ const FolderNode: React.FC<FolderNodeProps> = ({
         `}
         style={{ paddingLeft: `${level * 12 + 8}px` }}
         onClick={handleClick}
+        onDoubleClick={handleDoubleClick}
         onContextMenu={handleContextMenu}
         role="button"
         aria-expanded={hasChildren ? isExpanded : undefined}
@@ -176,6 +189,7 @@ const FolderNode: React.FC<FolderNodeProps> = ({
                 expandedIds={expandedIds}
                 onFolderSelect={onFolderSelect}
                 onExpandedChange={onExpandedChange}
+                onSetNewRoot={onSetNewRoot}
               />
             ))}
         </div>
@@ -190,6 +204,7 @@ export const FolderTree: React.FC<FolderTreeProps> = ({
   selectedFolderId,
   expandedIds,
   onExpandedChange,
+  onSetNewRoot,
 }) => {
   if (!folders?.length) {
     return (
@@ -209,6 +224,7 @@ export const FolderTree: React.FC<FolderTreeProps> = ({
           expandedIds={expandedIds}
           onFolderSelect={onFolderSelect}
           onExpandedChange={onExpandedChange}
+          onSetNewRoot={onSetNewRoot}
         />
       ))}
     </div>

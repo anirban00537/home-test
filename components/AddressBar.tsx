@@ -1,11 +1,15 @@
 import React from "react";
-import { Lock } from "lucide-react";
+import { Lock, ChevronLeft } from "lucide-react";
 
 interface AddressBarProps {
   currentUrl: string;
+  onNavigateToParent?: () => void;
 }
 
-export const AddressBar: React.FC<AddressBarProps> = ({ currentUrl }) => (
+export const AddressBar: React.FC<AddressBarProps> = ({
+  currentUrl,
+  onNavigateToParent,
+}) => (
   <header className="w-full bg-white sticky top-0 z-10 border-b border-slate-200/80">
     <div className="max-w-full mx-auto p-3">
       <div className="flex items-center gap-3">
@@ -14,11 +18,26 @@ export const AddressBar: React.FC<AddressBarProps> = ({ currentUrl }) => (
           <span>Address</span>
         </h2>
         <div className="group relative flex-1">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-blue-500 flex items-center justify-center shadow-inner">
-              <span className="text-[10px] font-semibold text-white">URL</span>
+          {onNavigateToParent && (
+            <button
+              onClick={onNavigateToParent}
+              className="absolute inset-y-0 left-0 pl-3 flex items-center"
+              aria-label="Navigate to parent directory"
+            >
+              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-blue-500 flex items-center justify-center shadow-inner hover:from-blue-500 hover:to-blue-600 transition-colors">
+                <ChevronLeft className="w-3 h-3 text-white" />
+              </div>
+            </button>
+          )}
+          {!onNavigateToParent && (
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-blue-500 flex items-center justify-center shadow-inner">
+                <span className="text-[10px] font-semibold text-white">
+                  URL
+                </span>
+              </div>
             </div>
-          </div>
+          )}
           <input
             type="text"
             value={currentUrl}

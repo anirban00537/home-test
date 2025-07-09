@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useMemo, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getFolders } from "../service/folders";
+import { getFolders, getFolderChildren } from "../service/folders";
 import { FolderItem, ApiResponse } from "../types/folder";
 import { FolderTree } from "../components/FolderTree";
 import { FolderDetails } from "../components/FolderDetails";
@@ -13,12 +13,19 @@ import { AddressBar } from "../components/AddressBar";
 const Page: React.FC = () => {
   const [selectedFolder, setSelectedFolder] = useState<FolderItem | null>(null);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+  const [rootFolder, setRootFolder] = useState<FolderItem | null>(null);
+
+  const queryKey = rootFolder ? ["folders", rootFolder.id] : ["folders"];
+
+  const queryFn = useCallback(() => {
+    return rootFolder ? getFolderChildren(rootFolder.id) : getFolders();
+  }, [rootFolder]);
 
   const { data, isLoading, error } = useQuery<ApiResponse<FolderItem[]>>({
-    queryKey: ["folders"],
-    queryFn: getFolders,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes (replaces cacheTime in newer versions)
+    queryKey,
+    queryFn,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 
   const handleFolderSelect = useCallback((folder: FolderItem) => {
@@ -37,11 +44,30 @@ const Page: React.FC = () => {
     });
   }, []);
 
+  const handleSetNewRoot = useCallback((folder: FolderItem) => {
+    setRootFolder(folder);
+    setSelectedFolder(null);
+    setExpandedIds(new Set());
+  }, []);
+
+  const handleNavigateToParent = useCallback(() => {
+    if (rootFolder) {
+      setRootFolder(null);
+      setSelectedFolder(null);
+      setExpandedIds(new Set());
+    }
+  }, [rootFolder]);
+
   const currentUrl = useMemo(() => {
+    if (rootFolder) {
+      return selectedFolder
+        ? `localhost:3000${rootFolder.path}/${selectedFolder.name}`
+        : `localhost:3000${rootFolder.path}`;
+    }
     return selectedFolder
       ? `localhost:3000${selectedFolder.path}`
       : "localhost:3000/";
-  }, [selectedFolder]);
+  }, [selectedFolder, rootFolder]);
 
   const folders = useMemo(() => {
     return data?.success && data.data ? data.data : [];
@@ -53,7 +79,10 @@ const Page: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <AddressBar currentUrl={currentUrl} />
+      <AddressBar
+        currentUrl={currentUrl}
+        onNavigateToParent={rootFolder ? handleNavigateToParent : undefined}
+      />
 
       <main className="flex flex-1">
         <aside className="w-64 border-r border-slate-200 bg-slate-50">
@@ -64,6 +93,7 @@ const Page: React.FC = () => {
               selectedFolderId={selectedFolder?.id}
               expandedIds={expandedIds}
               onExpandedChange={handleExpandedChange}
+              onSetNewRoot={handleSetNewRoot}
             />
           </nav>
         </aside>
