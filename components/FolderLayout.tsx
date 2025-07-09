@@ -1,24 +1,32 @@
-"use client";
 import React from "react";
-import { FolderItem } from "../types/folder";
-import { FolderTree } from "../components/FolderTree";
-import { AddressBar } from "../components/AddressBar";
-import { useUrlState } from "../hooks/useUrlState";
+import type { FolderItem } from "../types/folder";
+import { FolderTree } from "./FolderTree";
+import { AddressBar } from "./AddressBar";
 
-interface DefaultPageProps {
+interface FolderLayoutProps {
   folders: FolderItem[];
   expandedIds: Set<string>;
+  currentUrl: string;
   onExpandedChange: (id: string, expanded: boolean) => void;
   onSetNewRoot: (folder: FolderItem) => void;
+  onNavigateToParent?: () => void;
 }
 
-const DefaultPage = React.memo<DefaultPageProps>(
-  ({ folders, expandedIds, onExpandedChange, onSetNewRoot }) => {
-    const { currentUrl } = useUrlState();
-
+export const FolderLayout = React.memo<FolderLayoutProps>(
+  ({
+    folders,
+    expandedIds,
+    currentUrl,
+    onExpandedChange,
+    onSetNewRoot,
+    onNavigateToParent,
+  }) => {
     return (
       <div className="min-h-screen flex flex-col">
-        <AddressBar currentUrl={currentUrl} />
+        <AddressBar
+          currentUrl={currentUrl}
+          onNavigateToParent={onNavigateToParent}
+        />
 
         <main className="flex flex-1">
           <aside className="w-64 border-r border-slate-200 bg-slate-50">
@@ -37,6 +45,4 @@ const DefaultPage = React.memo<DefaultPageProps>(
   }
 );
 
-DefaultPage.displayName = "DefaultPage";
-
-export default DefaultPage;
+FolderLayout.displayName = "FolderLayout";

@@ -1,10 +1,11 @@
 "use client";
 import React from "react";
 import { useFolders } from "../hooks/useFolders";
+import { useUrlState } from "../hooks/useUrlState";
 import { LoadingState } from "../components/LoadingState";
 import { ErrorState } from "../components/ErrorState";
 import { EmptyState } from "../components/EmptyState";
-import DefaultPage from "./default";
+import { FolderLayout } from "../components/FolderLayout";
 
 const Page: React.FC = () => {
   const {
@@ -16,14 +17,17 @@ const Page: React.FC = () => {
     handleSetNewRoot,
   } = useFolders();
 
+  const { currentUrl } = useUrlState();
+
   if (isLoading) return <LoadingState />;
   if (error) return <ErrorState />;
   if (!folders?.length) return <EmptyState />;
 
   return (
-    <DefaultPage
+    <FolderLayout
       folders={folders}
       expandedIds={expandedIds}
+      currentUrl={currentUrl}
       onExpandedChange={handleExpandedChange}
       onSetNewRoot={handleSetNewRoot}
     />
