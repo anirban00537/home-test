@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
-import { usePathname } from "next/navigation";
 import { FolderItem } from "../types/folder";
 import { FolderTree } from "../components/FolderTree";
 import { AddressBar } from "../components/AddressBar";
+import { useUrlState } from "../hooks/useUrlState";
 
 interface DefaultPageProps {
   folders: FolderItem[];
@@ -14,11 +14,7 @@ interface DefaultPageProps {
 
 const DefaultPage = React.memo<DefaultPageProps>(
   ({ folders, expandedIds, onExpandedChange, onSetNewRoot }) => {
-    const pathname = usePathname();
-    const currentUrl =
-      typeof window === "undefined"
-        ? `http://localhost:3000${pathname}`
-        : `${window.location.origin}${pathname}`;
+    const { currentUrl } = useUrlState();
 
     return (
       <div className="min-h-screen flex flex-col">
