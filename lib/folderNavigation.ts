@@ -1,6 +1,7 @@
 import { FolderItem } from "../types/folder";
 import { folderStructure } from "./folderTree";
 
+// This function is used to find a folder by its path
 export const findFolderByPath = (path: string): FolderItem | null => {
   if (!path || path === "/") return null;
 
@@ -22,6 +23,7 @@ export const findFolderByPath = (path: string): FolderItem | null => {
   return searchFolder(folderStructure);
 };
 
+// This function is used to find the parent folder of a folder
 export const findParentFolder = (childPath: string): FolderItem | null => {
   if (!childPath) return null;
 
@@ -35,6 +37,7 @@ export const findParentFolder = (childPath: string): FolderItem | null => {
   return findFolderByPath(parentPath);
 };
 
+// This function is used to get the ancestors of a folder
 export const getPathAncestors = (path: string): string[] => {
   const segments = path.split("/").filter(Boolean);
   const ancestors: string[] = [];
@@ -48,6 +51,7 @@ export const getPathAncestors = (path: string): string[] => {
   return ancestors;
 };
 
+// This function is used to get the ancestor folder ids of a folder
 export const getAncestorFolderIds = (path: string): string[] => {
   const ancestors = getPathAncestors(path);
   const ancestorFolders = ancestors
@@ -57,6 +61,7 @@ export const getAncestorFolderIds = (path: string): string[] => {
   return ancestorFolders.map((folder) => folder.id);
 };
 
+// This function is used to convert a path to a folder state
 export const pathToFolderState = (path: string) => {
   if (!path || path === "/") {
     return {

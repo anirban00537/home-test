@@ -21,4 +21,3 @@ export const EmptyState: React.FC = () => (
     </div>
   </div>
 );
- 

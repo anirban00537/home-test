@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { ApiResponse } from "../types/folder";
 
+// This function is used to return a success response
 export function successResponse<T>(
   data: T,
   message: string = "Request successful",
@@ -16,6 +17,7 @@ export function successResponse<T>(
   );
 }
 
+// This function is used to return an error response
 export function errorResponse(
   message: string = "Internal server error",
   status: number = 500
