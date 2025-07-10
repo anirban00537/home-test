@@ -3,10 +3,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getFolders, getFolderChildren } from "../service/folders";
 import { FolderItem, ApiResponse } from "../types/folder";
-import {
-  pathToFolderState,
-  findFolderByPath,
-} from "../service/folderNavigation";
+import { pathToFolderState, findFolderByPath } from "../lib/folderNavigation";
 
 export const useDynamicFolders = () => {
   const params = useParams();

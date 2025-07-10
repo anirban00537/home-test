@@ -1,6 +1,6 @@
-# Next.js Docker Setup
+# Next.js Folder Browser - Docker Setup
 
-This project provides a containerized Next.js application with both development and production environments.
+A Next.js application that displays a hierarchical folder tree structure with expandable/collapsible navigation.
 
 ## 🚢 Default Docker Ports
 

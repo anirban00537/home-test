@@ -1,5 +1,5 @@
 import { FolderItem } from "../types/folder";
-import { folderStructure } from "../lib/folderTree";
+import { folderStructure } from "./folderTree";
 
 export const findFolderByPath = (path: string): FolderItem | null => {
   if (!path || path === "/") return null;
