@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Docker Setup
 
-## Getting Started
+This project provides a containerized Next.js application with both development and production environments.
 
-First, run the development server:
+## 🚢 Default Docker Ports
+
+- **Production Mode**: [http://localhost:3000](http://localhost:3000)
+- **Development Mode**: [http://localhost:3001](http://localhost:3001)
+
+You can customize these ports using the `-p` flag with the shell script or by modifying the docker-compose.yml file.
+
+## 🐳 Docker Setup
+
+### Prerequisites
+
+- [Docker](https://www.docker.com/get-started) installed on your machine
+- [Docker Compose](https://docs.docker.com/compose/install/) (usually included with Docker Desktop)
+
+### 🚀 Quick Start with Shell Script
+
+The easiest way to run this application in Docker is using the provided shell script:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Make the script executable (first time only)
+chmod +x run-docker.sh
+
+# Run in production mode (default, port 3000)
+./run-docker.sh
+
+# Run in development mode with hot reloading (port 3001)
+./run-docker.sh -m development
+
+# View help for all options
+./run-docker.sh --help
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Shell Script Options
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Basic usage
+./run-docker.sh                    # Production mode on port 3000
+./run-docker.sh -m development     # Development mode on port 3001
+./run-docker.sh -p 8080           # Custom port
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Build and management
+./run-docker.sh -b                # Build only, don't run
+./run-docker.sh -s                # Stop running containers
+./run-docker.sh -l                # View container logs
+./run-docker.sh -c                # Cleanup (stop containers and remove images)
+```
 
-## Learn More
+### Alternative: Manual Docker Commands
 
-To learn more about Next.js, take a look at the following resources:
+#### Production Build
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Build the production image
+docker build -t home-test-app .
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Run the production container
+docker run -p 3000:3000 home-test-app
+```
 
-## Deploy on Vercel
+#### Using Docker Compose
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Production Mode:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+# Run production service
+docker-compose up app -d
+
+# View logs
+docker-compose logs app
+
+# Stop the service
+docker-compose down
+```
+
+Development Mode:
+
+```bash
+# Run development service with hot reloading
+docker-compose up app-dev -d
+```
+
+### Docker Configuration Files
+
+- `Dockerfile`: Multi-stage production build with optimizations
+- `Dockerfile.dev`: Development build with hot reloading
+- `docker-compose.yml`: Orchestration for both environments
+- `.dockerignore`: Excludes unnecessary files from build context
+- `run-docker.sh`: All-in-one shell script for easy Docker management
